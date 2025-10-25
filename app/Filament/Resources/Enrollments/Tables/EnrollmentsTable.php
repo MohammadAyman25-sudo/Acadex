@@ -1,32 +1,29 @@
 <?php
 
-namespace App\Filament\Resources\Students\Tables;
+namespace App\Filament\Resources\Enrollments\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ForceDeleteBulkAction;
-use Filament\Actions\RestoreBulkAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
-class StudentsTable
+class EnrollmentsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('id')
-                    ->label('ID')
+                TextColumn::make('student_id')
                     ->searchable(),
-                TextColumn::make('user_id')
-                    ->searchable(),
-                TextColumn::make('user.name')
-                    ->label('Name')
-                    ->sortable()
-                    ->searchable(),
-                TextColumn::make('year_level'),
+                TextColumn::make('course_id')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('grade')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('status'),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -37,16 +34,15 @@ class StudentsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                TrashedFilter::make(),
+                //
             ])
             ->recordActions([
+                ViewAction::make(),
                 EditAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
-                    ForceDeleteBulkAction::make(),
-                    RestoreBulkAction::make(),
                 ]),
             ]);
     }

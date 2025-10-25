@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Teachers;
 
 use App\Filament\Resources\Teachers\Pages\ManageTeachers;
 use App\Models\Teacher;
+use UnitEnum;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -21,6 +22,8 @@ class TeacherResource extends Resource
     protected static ?string $model = Teacher::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static string | UnitEnum | null $navigationGroup = 'People';
 
     protected static ?string $recordTitleAttribute = 'name';
 
