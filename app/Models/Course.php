@@ -14,8 +14,7 @@ class Course extends Model
         'description',
         'credits',
         'is_active',
-        'departement_id',
-        'teacher_id',
+        'department_id',
     ];
 
     public function department()
@@ -23,7 +22,7 @@ class Course extends Model
         return $this->belongsTo(Department::class);
     }
 
-    public function teacher()
+    public function teachers()
     {
         return $this->belongsToMany(Teacher::class, 'course_teacher')
                     ->using(CourseTeacher::class)

@@ -2,20 +2,22 @@
 
 namespace App\Filament\Resources\Teachers;
 
-use App\Filament\Resources\Teachers\Pages\ManageTeachers;
+use App\Filament\Resources\Teachers\Pages\CreateTeacher;
+use App\Filament\Resources\Teachers\Pages\EditTeacher;
+use App\Filament\Resources\Teachers\Pages\ListTeachers;
+use App\Filament\Resources\Teachers\Pages\ViewTeacher;
+use App\Filament\Resources\Teachers\Schemas\TeacherForm;
+use App\Filament\Resources\Teachers\Schemas\TeacherInfolist;
+use App\Filament\Resources\Teachers\Tables\TeachersTable;
 use App\Models\Teacher;
 use UnitEnum;
 use BackedEnum;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TeacherResource extends Resource
 {
@@ -23,66 +25,47 @@ class TeacherResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static string | UnitEnum | null $navigationGroup = 'People';
+    protected static string|UnitEnum|null $navigationGroup = 'People';
 
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                TextInput::make('user_id')
-                    ->required(),
-                TextInput::make('department_id')
-                    ->numeric()
-                    ->default(null),
-            ]);
+        return TeacherForm::configure($schema);
+    }
+
+    public static function infolist(Schema $schema): Schema
+    {
+        return TeacherInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table
     {
-        return $table
-            ->recordTitleAttribute('name')
-            ->columns([
-                TextColumn::make('id')
-                    ->label('ID')
-                    ->searchable(),
-                TextColumn::make('user_id')
-                    ->searchable(),
-                TextColumn::make('department_id')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('name')
-                    ->label('Name')
-                    ->sortable()
-                    ->searchable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->filters([
-                //
-            ])
-            ->recordActions([
-                EditAction::make(),
-                DeleteAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+        return TeachersTable::configure($table);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => ManageTeachers::route('/'),
+            'index' => ListTeachers::route('/'),
+            'create' => CreateTeacher::route('/create'),
+            'view' => ViewTeacher::route('/{record}'),
+            'edit' => EditTeacher::route('/{record}/edit'),
         ];
+    }
+
+    public static function getRecordRouteBindingEloquentQuery(): Builder
+    {
+        return parent::getRecordRouteBindingEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }

@@ -8,6 +8,7 @@ use App\Filament\Resources\Departments\Pages\ListDepartments;
 use App\Filament\Resources\Departments\Schemas\DepartmentForm;
 use App\Filament\Resources\Departments\Tables\DepartmentsTable;
 use App\Models\Department;
+use UnitEnum;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -19,6 +20,8 @@ class DepartmentResource extends Resource
     protected static ?string $model = Department::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static string|UnitEnum|null $navigationGroup = 'Academics';
 
     protected static ?string $recordTitleAttribute = 'name';
 

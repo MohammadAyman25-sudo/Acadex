@@ -5,7 +5,6 @@ namespace App\Filament\Resources\Enrollments\Tables;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -16,10 +15,20 @@ class EnrollmentsTable
         return $table
             ->columns([
                 TextColumn::make('student_id')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('student.name')
+                    ->label('Student Name')
+                    ->sortable()
                     ->searchable(),
                 TextColumn::make('course_id')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('course.name')
+                    ->label('Course Name')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('grade')
                     ->numeric()
                     ->sortable(),
@@ -37,7 +46,6 @@ class EnrollmentsTable
                 //
             ])
             ->recordActions([
-                ViewAction::make(),
                 EditAction::make(),
             ])
             ->toolbarActions([

@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('course_teacher', function (Blueprint $table) {
-            $table->enum('role', ['primary_instructor', 'assistant_instructor', 'guest_lecturer'])->default('primary_instructor')->after('teacher_id');
-            $table->string('semester')->nullable()->after('role');
+            $table->enum('role', ['Instructor', 'Assistant'])->default('Instructor')->after('teacher_id');
+            $table->enum('semester', ['Fall', 'Spring', 'Summer'])->nullable()->after('role');
         });
     }
 

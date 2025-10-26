@@ -5,11 +5,10 @@ namespace App\Filament\Resources\Enrollments;
 use App\Filament\Resources\Enrollments\Pages\CreateEnrollment;
 use App\Filament\Resources\Enrollments\Pages\EditEnrollment;
 use App\Filament\Resources\Enrollments\Pages\ListEnrollments;
-use App\Filament\Resources\Enrollments\Pages\ViewEnrollment;
 use App\Filament\Resources\Enrollments\Schemas\EnrollmentForm;
-use App\Filament\Resources\Enrollments\Schemas\EnrollmentInfolist;
 use App\Filament\Resources\Enrollments\Tables\EnrollmentsTable;
 use App\Models\Enrollment;
+use UnitEnum;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -22,14 +21,13 @@ class EnrollmentResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static string|UnitEnum|null $navigationGroup = 'Academics';
+
+    protected static ?string $recordTitleAttribute = 'name';
+
     public static function form(Schema $schema): Schema
     {
         return EnrollmentForm::configure($schema);
-    }
-
-    public static function infolist(Schema $schema): Schema
-    {
-        return EnrollmentInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table
@@ -49,7 +47,6 @@ class EnrollmentResource extends Resource
         return [
             'index' => ListEnrollments::route('/'),
             'create' => CreateEnrollment::route('/create'),
-            'view' => ViewEnrollment::route('/{record}'),
             'edit' => EditEnrollment::route('/{record}/edit'),
         ];
     }

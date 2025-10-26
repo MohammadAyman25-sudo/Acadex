@@ -22,10 +22,19 @@ class CourseFactory extends Factory
             'name' => fake()->sentence(3),
             'code' => strtoupper(fake()->bothify('???###')),
             'description' => fake()->paragraph(),
-            'teacher_id' => Teacher::inRandomOrder()->first(),
             'department_id' => Department::inRandomOrder()->first(),
             'credits' => fake()->numberBetween(1, 5),
             'is_active' => fake()->boolean(80),
         ];
+    }
+
+    public function configure() {
+        return $this->afterCreating(function ($course) {
+            $teachers = Teacher::inRandomOrder()->take(rand(1, 3))->get();
+            $course->teachers()->attach($teachers, [
+                'role' => fake()->randomElement(['Instructor', 'Assistant']),
+                'semester' => fake()->randomElement(['Fall', 'Spring', 'Summer']),
+            ]);
+        });
     }
 }
