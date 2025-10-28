@@ -12,8 +12,24 @@ class StudentForm
     {
         return $schema
             ->components([
-                TextInput::make('user_id')
-                    ->required(),
+                TextInput::make('user.name')
+                    ->required()
+                    ->formatStateUsing(fn ($record) => $record?->user?->name)
+                    ->dehydrateStateUsing(fn ($state, $record) => $state)
+                    ->afterStateUpdated(function ($state, $record) {
+                                            if ($record?->user) {
+                                                $record->user->update(['name' => $state]);
+                                            }
+                                        }),
+                TextInput::make('user.email')
+                    ->required()
+                    ->formatStateUsing(fn($record) => $record?->user?->email)
+                    ->dehydrateStateUsing(fn($state, $record) => $state)
+                    ->afterStateUpdated(function ($state, $record) {
+                        if ($record?->user) {
+                            $record->user->update(['email' => $state]);
+                        }
+                    }),
                 Select::make('year_level')
                     ->options([
             'freshman' => 'Freshman',

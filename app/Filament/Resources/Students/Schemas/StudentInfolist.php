@@ -14,6 +14,10 @@ class StudentInfolist
                 TextEntry::make('id')
                     ->label('ID'),
                 TextEntry::make('user_id'),
+                TextEntry::make('user.name')
+                    ->label('Name'),
+                TextEntry::make('user.email')
+                    ->label('Email'),
                 TextEntry::make('year_level'),
                 TextEntry::make('created_at')
                     ->dateTime(),

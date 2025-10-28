@@ -18,6 +18,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\Pages\Page;
 
 class TeacherResource extends Resource
 {
@@ -28,6 +29,13 @@ class TeacherResource extends Resource
     protected static string|UnitEnum|null $navigationGroup = 'People';
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    public static function getRecordSubNavigation(Page $page): array {
+        return $page->generateNavigationItems([
+            ViewTeacher::class,
+            EditTeacher::class,
+        ]);
+    }
 
     public static function form(Schema $schema): Schema
     {

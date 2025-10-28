@@ -30,7 +30,10 @@ class CourseFactory extends Factory
 
     public function configure() {
         return $this->afterCreating(function ($course) {
-            $teachers = Teacher::inRandomOrder()->take(rand(1, 3))->get();
+            $teachers = Teacher::where('department_id', $course->department_id)
+                        ->inRandomOrder()
+                        ->take(rand(1, 3))
+                        ->get();
             $course->teachers()->attach($teachers, [
                 'role' => fake()->randomElement(['Instructor', 'Assistant']),
                 'semester' => fake()->randomElement(['Fall', 'Spring', 'Summer']),

@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\Courses\Schemas;
 
+use App\Models\Teacher;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
@@ -17,11 +19,33 @@ class CourseForm
                     ->required(),
                 TextInput::make('code')
                     ->required(),
-                TextInput::make('department_id')
-                    ->numeric()
-                    ->default(null),
-                TextInput::make('teacher_id')
-                    ->default(null),
+                Select::make('department_id')
+                    ->label('Department')
+                    ->relationship('department', 'name')
+                    ->required()
+                    ->reactive()
+                    ->afterStateUpdated(fn(callable $set) => $set('teachers', [])),
+                Select::make('teachers')
+                    ->label('Teachers')
+                    ->multiple()
+                    ->relationship('teachers', 'id')
+                    ->preload()
+                    ->searchable()
+                    ->reactive()
+                    ->options(function (callable $get) {
+                        $department = $get('department_id');
+
+                        $query = Teacher::query()
+                                    -> with('user')
+                                    -> whereHas('user')
+                                    -> when($department, fn($q) => $q->where('department_id', $department));
+                        
+                        return $query
+                                ->get()
+                                ->mapWithKeys(fn($teacher) => [$teacher->id => $teacher->user->name])
+                                ->toArray();
+                    }),
+                     //->getOptionLabelUsing(fn($value) => Teacher::with('user')->find($value)?->user?->name),
                 Textarea::make('description')
                     ->default(null)
                     ->columnSpanFull(),

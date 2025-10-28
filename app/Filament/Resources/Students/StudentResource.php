@@ -16,7 +16,9 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Filament\Resources\Pages\Page;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Pages\Enums\SubNavigationPosition;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class StudentResource extends Resource
@@ -26,6 +28,8 @@ class StudentResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static string|UnitEnum|null $navigationGroup = 'People';
+
+    protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Start;
 
     protected static ?string $recordTitleAttribute = 'name';
 
@@ -67,5 +71,17 @@ class StudentResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getRecordSubNavigation(Page $page): array {
+        return $page->generateNavigationItems([
+            ViewStudent::class,
+            EditStudent::class,
+        ]);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with(['user']);
     }
 }

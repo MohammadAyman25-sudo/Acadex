@@ -9,10 +9,13 @@ use App\Filament\Resources\Courses\Pages\ViewCourse;
 use App\Filament\Resources\Courses\Schemas\CourseForm;
 use App\Filament\Resources\Courses\Schemas\CourseInfolist;
 use App\Filament\Resources\Courses\Tables\CoursesTable;
+use App\Filament\Resources\Students\Pages\EditStudent;
+use App\Filament\Resources\Students\Pages\ViewStudent;
 use App\Models\Course;
 use UnitEnum;
 use BackedEnum;
 use Filament\Resources\Resource;
+use Filament\Resources\Pages\Page;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
@@ -35,6 +38,13 @@ class CourseResource extends Resource
     public static function infolist(Schema $schema): Schema
     {
         return CourseInfolist::configure($schema);
+    }
+
+    public static function getRecordSubNavigation(Page $page): array {
+        return $page->generateNavigationItems([
+            ViewCourse::class,
+            EditCourse::class,
+        ]);
     }
 
     public static function table(Table $table): Table

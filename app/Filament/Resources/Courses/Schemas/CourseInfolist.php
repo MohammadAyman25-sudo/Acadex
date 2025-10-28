@@ -16,7 +16,11 @@ class CourseInfolist
                 TextEntry::make('code'),
                 TextEntry::make('department_id')
                     ->numeric(),
-                TextEntry::make('teacher_id'),
+                TextEntry::make('department.name'),
+                TextEntry::make('teachers.user.name')
+                    ->label('Teachers Names')
+                    ->badge()
+                    ->listWithLineBreaks(),
                 TextEntry::make('credits')
                     ->numeric(),
                 IconEntry::make('is_active')

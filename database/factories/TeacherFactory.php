@@ -20,7 +20,7 @@ class TeacherFactory extends Factory
     {
         return [
             'user_id' => User::factory()->state(['role' => 'teacher']),
-            'department_id' => Department::factory(),
+            'department_id' => Department::inRandomOrder()->first(),
         ];
     }
 }
