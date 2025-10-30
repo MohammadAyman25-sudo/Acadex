@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\CourseSession;
-use App\Models\Student;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,9 +18,37 @@ class AttendanceFactory extends Factory
      */
     public function definition(): array
     {
+        $session = CourseSession::whereHas('course.students', function ($query) {
+            $query->whereIn('enrollments.status', ['enrolled', 'failed', 'completed', 'withdrawn']);
+        })
+            ->inRandomOrder()
+            ->with('course.students')
+            ->first();
+        if (!$session) {
+            return [
+                'session_id' => null,
+                'student_id' => null,
+                'status' => 'absent',
+                'note' => null,
+            ];
+        }
+        $student = $session
+            ->course
+            ->students()
+            ->whereIn('enrollments.status', ['enrolled', 'failed', 'completed', 'withdrawn'])
+            ->inRandomOrder()
+            ->first();
+        if (!$student) {
+            return [
+                'session_id' => $session->id,
+                'student_id' => null,
+                'status' => 'absent',
+                'note' => null,
+            ];
+        }
         return [
-            'session_id' => CourseSession::inRandomOrder()->first(),
-            'student_id' => Student::inRandomOrder()->first(),
+            'session_id' => $session?->id,
+            'student_id' => $student?->id,
             'status' => $this->faker->randomElement(['present', 'absent', 'excused', 'late']),
             'note' => $this->faker->optional()->sentence(),
         ];

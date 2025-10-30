@@ -19,10 +19,10 @@ class CourseSessionFactory extends Factory
     public function definition(): array
     {
         $course = Course::inRandomOrder()->first();
+        $teacher = $course->teachers()->inRandomOrder()->first();
         return [
             'course_id' => $course,
-            'teacher_id' => Teacher::where('department_id', '=', $course->department_id)
-                                ->inRandomOrder()->first(),
+            'teacher_id' => $teacher,
             'start_time' => $this->faker->time(),
             'end_time' => $this->faker->time(),
             'date' => $this->faker->date(),

@@ -21,8 +21,6 @@ class StudentsTable
                 TextColumn::make('id')
                     ->label('ID')
                     ->searchable(),
-                TextColumn::make('user_id')
-                    ->searchable(),
                 TextColumn::make('user.name')
                         ->label('Name')
                         ->sortable()
