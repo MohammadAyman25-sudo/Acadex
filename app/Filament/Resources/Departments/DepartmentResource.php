@@ -7,6 +7,7 @@ use App\Filament\Resources\Departments\Pages\EditDepartment;
 use App\Filament\Resources\Departments\Pages\ListDepartments;
 use App\Filament\Resources\Departments\Schemas\DepartmentForm;
 use App\Filament\Resources\Departments\Tables\DepartmentsTable;
+use App\Filament\Resources\Departments\Widgets\DepartmentStatWidget;
 use App\Models\Department;
 use UnitEnum;
 use BackedEnum;
@@ -28,6 +29,13 @@ class DepartmentResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return DepartmentForm::configure($schema);
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            DepartmentStatWidget::class,
+        ];
     }
 
     public static function table(Table $table): Table
