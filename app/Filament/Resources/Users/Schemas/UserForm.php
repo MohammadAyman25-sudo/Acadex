@@ -20,17 +20,12 @@ class UserForm
                     ->label('Email address')
                     ->email()
                     ->required(),
-                DateTimePicker::make('email_verified_at'),
                 TextInput::make('password')
-                    ->password()
-                    ->required(),
+                    ->password(),
                 Select::make('role')
                     ->options(['admin' => 'Admin', 'teacher' => 'Teacher', 'student' => 'Student'])
                     ->default('student')
-                    ->required(),
-                Textarea::make('app_authentication_secret')
-                    ->default(null)
-                    ->columnSpanFull(),
+                    ->required(),   
             ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users;
 
+use App\Filament\Resources\Teachers\Pages\EditTeacher;
 use App\Filament\Resources\Users\Pages\CreateUser;
 use App\Filament\Resources\Users\Pages\EditUser;
 use App\Filament\Resources\Users\Pages\ListUsers;
@@ -10,6 +11,9 @@ use App\Filament\Resources\Users\Schemas\UserForm;
 use App\Filament\Resources\Users\Schemas\UserInfolist;
 use App\Filament\Resources\Users\Tables\UsersTable;
 use App\Models\User;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
+use Filament\Pages\Page;
 use UnitEnum;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -39,6 +43,14 @@ class UserResource extends Resource
     public static function infolist(Schema $schema): Schema
     {
         return UserInfolist::configure($schema);
+    }
+
+    public static function getRecordSubNavigation(Page $page):array {
+        return $page->generateNavigationItems([
+            ViewUser::class,
+            EditUser::class,
+            ]
+        );
     }
 
     public static function table(Table $table): Table
