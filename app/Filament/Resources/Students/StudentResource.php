@@ -25,9 +25,11 @@ class StudentResource extends Resource
 {
     protected static ?string $model = Student::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUserCircle;
 
     protected static string|UnitEnum|null $navigationGroup = 'People';
+
+    protected static ?int $navigationSort = 2;
 
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Start;
 

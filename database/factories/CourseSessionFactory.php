@@ -25,7 +25,7 @@ class CourseSessionFactory extends Factory
             'teacher_id' => $teacher,
             'start_time' => $this->faker->time(),
             'end_time' => $this->faker->time(),
-            'date' => $this->faker->date(),
+            'date' => fake()->boolean(70)?$this->faker->date():today()->toDateString(),
             'topic' => $this->faker->sentence(),
         ];
     }

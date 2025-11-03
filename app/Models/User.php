@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
+use Filament\Models\Contracts\FilamentUser;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Filament\Auth\MultiFactor\App\Contracts\HasAppAuthentication;
 
 /**
  * @property string $id
@@ -43,7 +45,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutTrashed()
  * @mixin \Eloquent
  */
-class User extends Authenticatable implements MustVerifyEmail {
+class User extends Authenticatable implements FilamentUser, HasAppAuthentication, MustVerifyEmail {
     use HasFactory, Notifiable, HasUuids, SoftDeletes;
 
     public $incrementing = false;
@@ -61,6 +63,7 @@ class User extends Authenticatable implements MustVerifyEmail {
         'name',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -71,6 +74,7 @@ class User extends Authenticatable implements MustVerifyEmail {
     protected $hidden = [
         'password',
         'remember_token',
+        'app_authentication_secret',
     ];
 
     /**
@@ -83,7 +87,42 @@ class User extends Authenticatable implements MustVerifyEmail {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'app_authentication_secret' => 'encrypted',
         ];
+    }
+
+    public function getAppAuthenticationSecret(): ?string {
+        return $this->app_authentication_secret;
+    }
+
+    public function saveAppAuthenticationSecret(?string $secret): void
+    {
+        $this->app_authentication_secret = $secret;
+        $this->save();
+    }
+
+    public function getAppAuthenticationHolderName(): string
+    {
+        return $this->email;
+    }
+
+    public function canAccessPanel($panel): bool
+    {
+        if (request()->routeIs("filament.{$panel->getId()}.auth.*")){
+            return true;
+        }
+
+        if (! $this->exists) {
+            return false;
+        }
+
+        return filter_var($this->email, FILTER_VALIDATE_EMAIL)
+                && $this->hasVerifiedEmail() 
+                && match($panel->getId()){
+                    'admin' => $this->role === 'admin',
+                    'teacher' => ($this->role === 'teacher' || $this->role === 'admin'),
+                    'student' => ($this->role === 'student'),
+                };
     }
 
     public function student()
