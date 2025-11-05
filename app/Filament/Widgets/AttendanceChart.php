@@ -14,12 +14,12 @@ class AttendanceChart extends ChartWidget
     protected function getData(): array
     {
         $counts = Attendance::query()
-                    ->selectRaw("status, COUNT(*) as total")
-                    ->whereHas('courseSession', function ($q):void {
-                        $q->whereDate('course_sessions.date', '=', today());
+                    ->whereHas('courseSession', function ($q) {
+                        $q->whereDate('date','=', today());
                     })
+                    ->selectRaw('status, COUNT(*) as count')
                     ->groupBy('status')
-                    ->pluck('total', 'status')
+                    ->pluck('count', 'status')
                     ->toArray();
 
         return [
