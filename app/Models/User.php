@@ -63,7 +63,6 @@ class User extends Authenticatable implements FilamentUser, HasAppAuthentication
         'name',
         'email',
         'password',
-        'role',
     ];
 
     /**

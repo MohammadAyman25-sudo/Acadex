@@ -2,6 +2,7 @@
 
 namespace App\Filament\Teacher;
 
+use App\Models\Teacher;
 use App\Models\User;
 use Filament\Auth\Pages\Register as BaseRegistration;
 
@@ -9,9 +10,14 @@ class Register extends BaseRegistration
 {
     protected function handleRegistration(array $data): User
     {
-        return User::create([
+        $user = User::create([
             ...$data,
-            'role' => 'teacher',
         ]);
+        $user->role = 'teacher';
+        $user->save();
+        Teacher::create([
+            'user_id' => $user->id,
+        ]);
+        return $user;
     }
 }

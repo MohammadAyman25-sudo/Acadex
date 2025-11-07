@@ -32,11 +32,11 @@ class StudentForm
                     }),
                 Select::make('year_level')
                     ->options([
-            'freshman' => 'Freshman',
-            'sophomore' => 'Sophomore',
-            'junior' => 'Junior',
-            'senior' => 'Senior',
-        ])
+                        'freshman' => 'Freshman',
+                        'sophomore' => 'Sophomore',
+                        'junior' => 'Junior',
+                        'senior' => 'Senior',
+                    ])
                     ->default('freshman')
                     ->required(),
             ]);

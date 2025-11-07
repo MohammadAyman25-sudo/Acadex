@@ -3,11 +3,11 @@
 namespace App\Filament\Resources\Courses\Schemas;
 
 use App\Models\Teacher;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 
 class CourseForm
 {
@@ -45,7 +45,6 @@ class CourseForm
                                 ->mapWithKeys(fn($teacher) => [$teacher->id => $teacher->user->name])
                                 ->toArray();
                     }),
-                     //->getOptionLabelUsing(fn($value) => Teacher::with('user')->find($value)?->user?->name),
                 Textarea::make('description')
                     ->default(null)
                     ->columnSpanFull(),

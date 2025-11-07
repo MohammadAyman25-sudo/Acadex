@@ -26,7 +26,7 @@ class TeacherForm
                 TextInput::make('user.email')
                     ->required()
                     ->formatStateUsing(fn($record) => $record?->user?->email)
-                    ->dehydrateStateUsing(fn($state, $record) => $state)
+                    ->dehydrateStateUsing(fn($state) => $state)
                     ->afterStateUpdated(function ($state, $record) {
                         if ($record?->user) {
                             $record->user->update(['email' => $state]);
@@ -34,7 +34,7 @@ class TeacherForm
                     }),
                 Select::make("department_id")
                     ->label('Department')
-                    ->options(fn() => Department::pluck('name', 'id'))
+                    ->relationship('department', 'name')
                     ->preload()
                     ->default(null),
                 
