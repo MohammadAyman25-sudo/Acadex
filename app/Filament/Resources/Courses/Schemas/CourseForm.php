@@ -34,7 +34,6 @@ class CourseForm
                     ->reactive()
                     ->options(function (callable $get) {
                         $department = $get('department_id');
-
                         $query = Teacher::query()
                                     -> with('user')
                                     -> whereHas('user')
