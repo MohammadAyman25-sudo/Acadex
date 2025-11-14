@@ -12,6 +12,7 @@ class CourseInfolist
     {
         return $schema
             ->components([
+                TextEntry::make('id'),
                 TextEntry::make('name'),
                 TextEntry::make('code'),
                 TextEntry::make('department_id')

@@ -11,9 +11,17 @@ class TeacherStudentWidget extends StatsOverviewWidget
     protected function getStats(): array
     {
         $teacher = auth()->user()->teacher;
-        $studentsCount = DB::table('enrollments')
+        $coursesCount = $teacher->courses()->count();
+        $coursesIds = DB::table('course_teacher')
+            ->where('course_teacher.teacher_id', $teacher->id)
+            ->distinct('course_teacher.course_id')
+            ->pluck('course_teacher.course_id')
+            ->toArray();
+        $studentsCount = DB::table('enrollments')   
             ->join('courses', 'enrollments.course_id', '=', 'courses.id')
+            ->whereIn('enrollments.course_id', $coursesIds)
             ->where('courses.department_id', $teacher->department_id)
+            ->whereIn('enrollments.status', ['enrolled',  'completed', 'failed'])
             ->distinct('enrollments.student_id')
             ->count('enrollments.student_id');
 
@@ -22,6 +30,10 @@ class TeacherStudentWidget extends StatsOverviewWidget
                 ->color('success')
                 ->icon('heroicon-o-users')
                 ->description('Total number of students you\'re teaching regardless to the course'),
+            Stat::make('Total Courses', $coursesCount)
+                ->color('primary')
+                ->icon('heroicon-o-book-open')
+                ->description('Total number of courses you are teaching')
         ];
     }
 }

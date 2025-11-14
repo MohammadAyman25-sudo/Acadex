@@ -32,7 +32,7 @@ class CourseFactory extends Factory
         return $this->afterCreating(function ($course) {
             $teachers = Teacher::where('department_id', $course->department_id)
                         ->inRandomOrder()
-                        ->take(rand(1, 3))
+                        ->take(rand(1, 5))
                         ->get();
             $course->teachers()->attach($teachers, [
                 'role' => fake()->randomElement(['Instructor', 'Assistant']),
