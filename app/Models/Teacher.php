@@ -70,4 +70,8 @@ class Teacher extends Model
     public function getNameAttribute() {
         return $this->user->name ?? "Teacher ({$this->id})";
     }
+
+    public function sessions() {
+        return $this->hasMany(CourseSession::class, 'teacher_id');
+    }
 }

@@ -96,6 +96,7 @@ class User extends Authenticatable implements FilamentUser, HasAppAuthentication
 
     public function saveAppAuthenticationSecret(?string $secret): void
     {
+        dd($secret);
         $this->app_authentication_secret = $secret;
         $this->save();
     }
@@ -119,7 +120,7 @@ class User extends Authenticatable implements FilamentUser, HasAppAuthentication
                 && $this->hasVerifiedEmail() 
                 && match($panel->getId()){
                     'admin' => $this->role === 'admin',
-                    'teacher' => ($this->role === 'teacher' || $this->role === 'admin'),
+                    'teacher' => ($this->role === 'teacher'),
                     'student' => ($this->role === 'student'),
                 };
     }

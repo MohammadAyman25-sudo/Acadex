@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Models\Attendance;
 use Filament\Widgets\ChartWidget;
+use Illuminate\Support\Facades\DB;
 
 class AttendanceChart extends ChartWidget
 {

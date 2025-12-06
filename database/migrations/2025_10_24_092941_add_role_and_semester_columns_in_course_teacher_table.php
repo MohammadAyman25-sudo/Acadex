@@ -22,8 +22,15 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('course_teacher', function (Blueprint $table) {
-            //
-        });
+        if (Schema::hasColumn('course_teacher', 'role')) {
+            Schema::table('course_teacher', function (Blueprint $table) {
+                $table->dropColumn('role');
+            });
+        }
+        if (Schema::hasColumn('course_teacher', 'semester')) {
+            Schema::table('course_teacher', function (Blueprint $table) {
+                $table->dropColumn('semester');
+            });
+        }
     }
 };

@@ -60,6 +60,11 @@ class Course extends Model
         return $this->belongsTo(Department::class);
     }
 
+    public function sessions() 
+    {
+        return $this->hasMany(CourseSession::class, 'course_id');
+    }
+
     public function teachers()
     {
         return $this->belongsToMany(Teacher::class, 'course_teacher')
@@ -79,4 +84,5 @@ class Course extends Model
                     ->withPivot(['status'])
                     ->withTimestamps();
     }
+    
 }
