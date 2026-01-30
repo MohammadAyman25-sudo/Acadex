@@ -14,7 +14,7 @@ class EnrollmentWidget extends ChartWidget
 
     protected function getData(): array
     {
-        $courses = CourseTeacher::query()->where('teacher_id', auth()->user()->teacher->id)?->pluck('id')->toArray();
+        $courses = CourseTeacher::query()->where('teacher_id', auth()->user()->teacher->id)?->pluck('course_id')->toArray();
         $counts = Enrollment::query()->selectRaw('status, COUNT(*) as total')
             ->whereIn('enrollments.course_id', $courses)
             ->groupBy('status')

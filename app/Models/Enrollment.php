@@ -37,4 +37,10 @@ class Enrollment extends Pivot
     {
         return $this->belongsTo(Course::class);
     }
+
+
+    public function scopeForTeacher($query, $teacherId)
+    {
+        return $query->whereHas('course.teachers', fn($q) => $q->where('teacher_id', $teacherId));
+    }
 }

@@ -84,5 +84,10 @@ class Course extends Model
                     ->withPivot(['status'])
                     ->withTimestamps();
     }
+
+    public function scopeForTeacher($query, $teacherId)
+    {
+        return $query->whereHas('teachers', fn($q) => $q->where('teacher_id', $teacherId));
+    }
     
 }

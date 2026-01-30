@@ -17,8 +17,7 @@ class CoursesTable
 
     public static function table(Table $table): Table
     {
-        return $table->modifyQueryUsing(fn(Builder $query) => $query->whereHas('teachers', fn($q)=>$q->where('teacher_id', auth()->user()->teacher->id))
-        )
+        return $table->modifyQueryUsing(fn(Builder $query) => $query->forTeacher(auth()->user()->teacher->id))
         ->columns([
             TextColumn::make('name')
                 ->searchable(),
